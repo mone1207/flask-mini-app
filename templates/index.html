@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo App</title>
+</head>
+<body>
+    <h1>Todo App</h1>
+
+    <!-- タスク追加フォーム -->
+    <form method="POST" action="/add">
+        <input type="text" name="title" placeholder="Add Todo" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <!-- タスク一覧表示 -->
+    <ul>
+        {% for todo in todo_list %}
+            <li>{{ todo.title }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

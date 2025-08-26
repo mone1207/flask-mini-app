@@ -1,15 +1,35 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-    return "Hello, Flask!"
+# DBの設定（同じフォルダに db.sqlite が作られる）
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+db = SQLAlchemy(app)
 
-@app.route("/about")
-def about():
-    return "これはAboutページです"
+# Todoモデル（テーブル定義）
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
 
-# test
+# タスク表示
+@app.route("/", methods=["GET"])
+def home():
+    todo_list = Todo.query.all()  # DBからすべてのタスクを取得
+    return render_template("index.html", todo_list=todo_list)
 
+@app.route("/add", methods=["POST"])
+def add():
+    title = request.form.get("title")  # フォームからタイトルを取得
+    new_todo = Todo(title=title)
+    db.session.add(new_todo)
+    db.session.commit()
+    return redirect(url_for("home"))  # 追加後にトップページへ戻る
+
+# DBのテーブル作成
+with app.app_context():
+    db.create_all()
+
+# サーバー起動
 if __name__ == "__main__":
     app.run(debug=True)
