@@ -22,6 +22,10 @@
                 <form method="POST" action="/delete/{{ todo.id }}" style="display:inline;">
                     <button type="submit">Delete</button>
                 </form>
+
+                <a href="{{ url_for('update', todo_id=todo.id) }}">
+                    <input type="checkbox" {% if todo.complete %}checked{% endif %}>
+                </a>
             </li>
         {% endfor %}
     </ul>

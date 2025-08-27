@@ -11,6 +11,7 @@ db = SQLAlchemy(app)
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
+    complete = db.Column(db.Boolean, default=False)
 
 # タスク表示
 @app.route("/", methods=["GET"])
@@ -35,6 +36,14 @@ def delete(todo_id):
         db.session.delete(todo)  # DBから削除
         db.session.commit()
     return redirect(url_for("home"))  # 削除後はトップページに戻る  
+
+# 完了フラグ
+@app.route("/update/<int:todo_id>")
+def update(todo_id):
+    todo = Todo.query.get(todo_id)  # IDでタスクを取得
+    todo.complete = not todo.complete  # True ⇔ False を切り替え
+    db.session.commit()
+    return redirect(url_for("home"))
 
 # サーバー起動
 if __name__ == "__main__":
