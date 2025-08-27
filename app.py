@@ -18,18 +18,27 @@ def home():
     todo_list = Todo.query.all()  # DBからすべてのタスクを取得
     return render_template("index.html", todo_list=todo_list)
 
+# タスク追加
 @app.route("/add", methods=["POST"])
 def add():
     title = request.form.get("title")  # フォームからタイトルを取得
     new_todo = Todo(title=title)
     db.session.add(new_todo)
     db.session.commit()
-    return redirect(url_for("home"))  # 追加後にトップページへ戻る
+    return redirect(url_for("home"))  # 追加後にトップページへ戻る  
 
-# DBのテーブル作成
-with app.app_context():
-    db.create_all()
+# タスク削除
+@app.route("/delete/<int:todo_id>", methods=["POST"])
+def delete(todo_id):
+    todo = Todo.query.filter_by(id=todo_id).first()  # IDで対象タスクを取得
+    if todo:
+        db.session.delete(todo)  # DBから削除
+        db.session.commit()
+    return redirect(url_for("home"))  # 削除後はトップページに戻る  
 
 # サーバー起動
 if __name__ == "__main__":
+    # DBのテーブル作成
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)

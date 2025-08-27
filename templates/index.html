@@ -15,7 +15,14 @@
     <!-- タスク一覧表示 -->
     <ul>
         {% for todo in todo_list %}
-            <li>{{ todo.title }}</li>
+            <li>
+                {{ todo.title }}
+
+                <!-- 削除ボタン -->
+                <form method="POST" action="/delete/{{ todo.id }}" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
         {% endfor %}
     </ul>
 </body>
