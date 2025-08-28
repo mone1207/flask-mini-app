@@ -28,6 +28,20 @@ def add():
     db.session.commit()
     return redirect(url_for("home"))  # 追加後にトップページへ戻る  
 
+# 編集画面を表示
+@app.route("/edit/<int:todo_id>", methods=["GET", "POST"])
+def edit(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+
+    if request.method == "POST":
+        # 入力されたタイトルで更新
+        todo.title = request.form["title"]
+        db.session.commit()
+        return redirect(url_for("home"))
+
+    # GET のときは編集画面を表示
+    return render_template("edit.html", todo=todo)
+
 # タスク削除
 @app.route("/delete/<int:todo_id>", methods=["POST"])
 def delete(todo_id):

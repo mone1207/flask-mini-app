@@ -23,8 +23,12 @@
                     <button type="submit">Delete</button>
                 </form>
 
+                <!-- 完了チェック -->
                 <a href="{{ url_for('update', todo_id=todo.id) }}">
                     <input type="checkbox" {% if todo.complete %}checked{% endif %}>
+
+                <!-- 編集ボタン -->
+                <a href="{{ url_for('edit', todo_id=todo.id) }}">Edit</a>
                 </a>
             </li>
         {% endfor %}

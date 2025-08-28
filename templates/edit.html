@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Todo</title>
+</head>
+<body>
+    <h1>Edit Todo</h1>
+
+    <form method="POST" action="{{ url_for('edit', todo_id=todo.id) }}">
+        <input type="text" name="title" value="{{ todo.title }}" required>
+        <button type="submit">Update</button>
+    </form>
+
+    <a href="{{ url_for('home') }}">Back</a>
+</body>
+</html>
